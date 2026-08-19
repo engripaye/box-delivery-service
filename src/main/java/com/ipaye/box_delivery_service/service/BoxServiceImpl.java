@@ -84,6 +84,14 @@ public class BoxServiceImpl implements BoxService {
             );
         }
 
+        /*
+         * The box enters LOADING state only after
+         * all validation checks have passed.
+         */
+
+        box.setState(BoxState.LOADING);
+        boxRepository.save(box);
+
         List<Item> newItems = items.stream()
                 .map(request -> {
                     Item item = new Item();
