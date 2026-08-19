@@ -4,6 +4,7 @@ import com.ipaye.box_delivery_service.dto.CreateBoxRequest;
 import com.ipaye.box_delivery_service.entity.Box;
 import com.ipaye.box_delivery_service.enums.BoxState;
 import com.ipaye.box_delivery_service.exception.BoxAlreadyExistsException;
+import com.ipaye.box_delivery_service.exception.BoxNotFoundException;
 import com.ipaye.box_delivery_service.repository.BoxRepository;
 import com.ipaye.box_delivery_service.repository.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -87,5 +90,17 @@ class BoxServiceImplTest {
 
         verify(boxRepository, never()).save(any(Box.class));
 
+    }
+
+    @Test
+    void shouldThrowExceptionWhenBoxDoesNotExist(){
+
+        when(boxRepository.findByTxref("UNKNOWN"))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                BoxNotFoundException.class,
+                () -> boxService.getBatteryCapacity("UNKNOWN")
+        );
     }
 }
