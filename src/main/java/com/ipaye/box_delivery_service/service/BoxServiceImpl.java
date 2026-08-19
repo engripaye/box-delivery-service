@@ -6,6 +6,7 @@ import com.ipaye.box_delivery_service.entity.Item;
 import com.ipaye.box_delivery_service.enums.BoxState;
 import com.ipaye.box_delivery_service.exception.BoxAlreadyExistsException;
 import com.ipaye.box_delivery_service.exception.BoxNotFoundException;
+import com.ipaye.box_delivery_service.exception.InsufficientBatteryException;
 import com.ipaye.box_delivery_service.exception.InsufficientCapacityException;
 import com.ipaye.box_delivery_service.repository.BoxRepository;
 import com.ipaye.box_delivery_service.repository.ItemRepository;
@@ -136,6 +137,15 @@ public class BoxServiceImpl implements BoxService {
 
         return boxRepository.findByTxref(txref)
                 .orElseThrow(() -> new BoxNotFoundException(txref));
+    }
+
+    private void validateBoxCanAcceptItems(Box box) {
+
+        if (box.getBatteryCapacity() < MINIMUM_BATTERY_PERCENTAGE) {
+            throw new InsufficientBatteryException(
+                    "Box battery must be at least "
+                            + MINIMUM_BATTERY_PERCENTAGE + "%"
+            );
     }
 
 
