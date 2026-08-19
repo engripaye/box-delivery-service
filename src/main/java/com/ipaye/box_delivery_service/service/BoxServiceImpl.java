@@ -4,10 +4,7 @@ import com.ipaye.box_delivery_service.dto.*;
 import com.ipaye.box_delivery_service.entity.Box;
 import com.ipaye.box_delivery_service.entity.Item;
 import com.ipaye.box_delivery_service.enums.BoxState;
-import com.ipaye.box_delivery_service.exception.BoxAlreadyExistsException;
-import com.ipaye.box_delivery_service.exception.BoxNotFoundException;
-import com.ipaye.box_delivery_service.exception.InsufficientBatteryException;
-import com.ipaye.box_delivery_service.exception.InsufficientCapacityException;
+import com.ipaye.box_delivery_service.exception.*;
 import com.ipaye.box_delivery_service.repository.BoxRepository;
 import com.ipaye.box_delivery_service.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -146,7 +143,14 @@ public class BoxServiceImpl implements BoxService {
                     "Box battery must be at least "
                             + MINIMUM_BATTERY_PERCENTAGE + "%"
             );
+
+
     }
+        if (box.getState() != BoxState.IDLE) {
+            throw new InvalidBoxStateException(
+                    "Box must be in IDLE state before loading items"
+            );
+        }
 
 
 }
