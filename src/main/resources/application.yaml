@@ -2,21 +2,21 @@ spring:
   application:
     name: box-delivery-service
 
-datasource:
-  url: jdbc:h2:mem:boxdelivery
-  driver-class-name: org.h2.Driver
-  username: ipaye
-  password:
+  datasource:
+    url: jdbc:h2:mem:boxdelivery
+    driver-class-name: org.h2.Driver
+    username: ipaye
+    password:
 
-jpa:
-  hibernate:
-    ddl-auto: create-drop
-  show-sql: false
-  open-in-view: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    open-in-view: false
 
-h2:
-  console:
-    enabled: true
+  h2:
+    console:
+      enabled: true
 
 server:
   port: 8081
