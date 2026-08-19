@@ -16,16 +16,38 @@ public class DataInitializer {
     CommandLineRunner initializeDatabase(BoxRepository boxRepository){
 
         return args -> {
-           if (boxRepository.count() > 0) {
-               return;
-           }
+            if (boxRepository.count() > 0) {
+                return;
+            }
 
-           boxRepository.saveAll(List.of(
-                   new Box(null, "BOX001", 500, 85, BoxState.IDLE, null),
-                   new Box(null, "BOX002", 400, 60, BoxState.IDLE, null),
-                   new Box(null, "BOX003", 300, 20, BoxState.IDLE, null),
-                   new Box(null, "BOX004", 500, 90, BoxState.LOADED, null)
-           ));
+            Box box1 = new Box();
+            box1.setTxref("BOX001");
+            box1.setWeightLimit(500);
+            box1.setBatteryCapacity(85);
+            box1.setState(BoxState.IDLE);
+
+            Box box2 = new Box();
+            box2.setTxref("BOX002");
+            box2.setWeightLimit(400);
+            box2.setBatteryCapacity(60);
+            box2.setState(BoxState.IDLE);
+
+            Box box3 = new Box();
+            box3.setTxref("BOX003");
+            box3.setWeightLimit(300);
+            box3.setBatteryCapacity(20);
+            box3.setState(BoxState.IDLE);
+
+            Box box4 = new Box();
+            box4.setTxref("BOX004");
+            box4.setWeightLimit(500);
+            box4.setBatteryCapacity(90);
+            box4.setState(BoxState.LOADED);
+
+            boxRepository.save(box1);
+            boxRepository.save(box2);
+            boxRepository.save(box3);
+            boxRepository.save(box4);
         };
     }
 }
