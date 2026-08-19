@@ -45,4 +45,10 @@ public class BoxController {
         return ResponseEntity.ok(boxService.loadItems(txref, items));
     }
 
+    @GetMapping("/{txref}/items")
+    public ResponseEntity<List<ItemResponse>> getLoadedItems(
+            @PathVariable String txref
+    ){
+        return ResponseEntity.ok(boxService.getLoadedItems(txref));
+    }
 }
