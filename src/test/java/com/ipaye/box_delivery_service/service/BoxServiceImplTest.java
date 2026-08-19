@@ -214,4 +214,64 @@ class BoxServiceImplTest {
 
         verify(itemRepository, never()).saveAll(any());
     }
+
+    @Test
+    void shouldLoadItemsSuccessfully() {
+
+        Box box = createBox(
+                "BOX100",
+                500,
+                80,
+                BoxState.IDLE
+        );
+
+        when(boxRepository.findByTxref("BOX100"))
+                .thenReturn(Optional.of(box));
+
+        List<ItemRequest> requests = List.of(
+                new ItemRequest(
+                        "Laptop",
+                        200,
+                        "ITEM_001"
+                ),
+                new ItemRequest(
+                        "Mouse",
+                        50,
+                        "ITEM_002"
+                )
+        );
+
+        Item item1 = new Item();
+        item1.setId(1L);
+        item1.setName("Laptop");
+        item1.setWeight(200);
+        item1.setCode("ITEM_001");
+        item1.setBox(box);
+
+        Item item2 = new Item();
+        item2.setId(2L);
+        item2.setName("Mouse");
+        item2.setWeight(50);
+        item2.setCode("ITEM_002");
+        item2.setBox(box);
+
+        when(itemRepository.saveAll(any()))
+                .thenReturn(List.of(item1, item2));
+
+        var response = boxService.loadItems(
+                "BOX100",
+                requests
+        );
+
+        assertEquals(2, response.size());
+        assertEquals("Laptop", response.get(0).name());
+        assertEquals("Mouse", response.get(1).name());
+
+        assertEquals(
+                BoxState.LOADED,
+                box.getState()
+        );
+
+        verify(itemRepository).saveAll(any());
+    }
 }
