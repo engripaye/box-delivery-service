@@ -61,6 +61,12 @@ public class BoxServiceImpl implements BoxService {
             String txref,
             List<ItemRequest> items) {
 
+        if(items == null || items.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "At least one item is required"
+            );
+        }
+
         Box box = findBox(txref);
 
         validateBoxCanAcceptItems(box);
