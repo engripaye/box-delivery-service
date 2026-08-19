@@ -83,8 +83,30 @@ public class BoxServiceImpl implements BoxService {
                             + "g exceeds the box weight limit of "
                             + box.getWeightLimit() + "g"
             );
-    }
+        }
 
+        List<Item> newItems = items.stream()
+                .map(request -> {
+                    Item item = new Item();
+
+                    item.setName(request.name());
+                    item.setWeight(request.weight());
+                    item.setCode(request.code());
+                    item.setBox(box);
+
+                    return item;
+                })
+                .toList();
+
+        List<Item> savedItems = itemRepository.saveAll(newItems);
+
+        box.setState(BoxState.LOADED);
+        boxRepository.save(box);
+
+        return savedItems.stream()
+                .map(this::toItemResponse)
+                .toList();
+    }
     @Override
     public List<ItemResponse> getLoadedItems(String txref) {
         return List.of();
