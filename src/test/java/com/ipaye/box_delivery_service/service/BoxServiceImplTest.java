@@ -3,11 +3,9 @@ package com.ipaye.box_delivery_service.service;
 import com.ipaye.box_delivery_service.dto.CreateBoxRequest;
 import com.ipaye.box_delivery_service.dto.ItemRequest;
 import com.ipaye.box_delivery_service.entity.Box;
+import com.ipaye.box_delivery_service.entity.Item;
 import com.ipaye.box_delivery_service.enums.BoxState;
-import com.ipaye.box_delivery_service.exception.BoxAlreadyExistsException;
-import com.ipaye.box_delivery_service.exception.BoxNotFoundException;
-import com.ipaye.box_delivery_service.exception.InsufficientBatteryException;
-import com.ipaye.box_delivery_service.exception.InvalidBoxStateException;
+import com.ipaye.box_delivery_service.exception.*;
 import com.ipaye.box_delivery_service.repository.BoxRepository;
 import com.ipaye.box_delivery_service.repository.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -177,6 +175,40 @@ class BoxServiceImplTest {
 
         assertThrows(
                 InvalidBoxStateException.class,
+                () -> boxService.loadItems("BOX100", items)
+        );
+
+        verify(itemRepository, never()).saveAll(any());
+    }
+
+    @Test
+    void shouldRejectItemsWhenWeightExceedsCapacity(){
+        Box box = createBox(
+                "BOX100",
+                500,
+                80,
+                BoxState.IDLE
+        );
+
+        Item existingItem = new Item();
+        existingItem.setWeight(400);
+        existingItem.setBox(box);
+
+        box.setItems(new ArrayList<>(List.of(existingItem)));
+
+        when(boxRepository.findByTxref("BOX100"))
+                .thenReturn(Optional.of(box));
+
+        List<ItemRequest> items = List.of(
+                new ItemRequest(
+                        "Laptop",
+                        150,
+                        "ITEM_001"
+                )
+        );
+
+        assertThrows(
+                InsufficientCapacityException.class,
                 () -> boxService.loadItems("BOX100", items)
         );
 
