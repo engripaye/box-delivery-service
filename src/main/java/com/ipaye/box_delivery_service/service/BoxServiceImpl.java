@@ -2,8 +2,10 @@ package com.ipaye.box_delivery_service.service;
 
 import com.ipaye.box_delivery_service.dto.*;
 import com.ipaye.box_delivery_service.entity.Box;
+import com.ipaye.box_delivery_service.entity.Item;
 import com.ipaye.box_delivery_service.enums.BoxState;
 import com.ipaye.box_delivery_service.exception.BoxAlreadyExistsException;
+import com.ipaye.box_delivery_service.exception.InsufficientCapacityException;
 import com.ipaye.box_delivery_service.repository.BoxRepository;
 import com.ipaye.box_delivery_service.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -55,8 +57,32 @@ public class BoxServiceImpl implements BoxService {
     }
 
     @Override
-    public List<ItemResponse> loadItems(String txref, List<ItemRequest> items) {
-        return List.of();
+    public List<ItemResponse>
+    loadItems(
+            String txref,
+            List<ItemRequest> items) {
+
+        Box box = findBox(txref);
+
+        validateBoxCanAcceptItems(box);
+
+        int totalItemWeight = items.stream()
+                .mapToInt(ItemRequest::weight)
+                .sum();
+
+        int currentWeight = box.getItems()
+                .stream()
+                .mapToInt(Item::getWeight)
+                .sum();
+
+        int totalWeight = currentWeight + totalItemWeight;
+
+        if (totalWeight > box.getWeightLimit()) {
+            throw new InsufficientCapacityException(
+                    "Total item weight of " + totalWeight
+                            + "g exceeds the box weight limit of "
+                            + box.getWeightLimit() + "g"
+            );
     }
 
     @Override
