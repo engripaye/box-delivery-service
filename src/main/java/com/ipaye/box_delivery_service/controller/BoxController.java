@@ -1,7 +1,6 @@
 package com.ipaye.box_delivery_service.controller;
 
-import com.ipaye.box_delivery_service.dto.BoxResponse;
-import com.ipaye.box_delivery_service.dto.CreateBoxRequest;
+import com.ipaye.box_delivery_service.dto.*;
 import com.ipaye.box_delivery_service.service.BoxService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +35,14 @@ public class BoxController {
             @PathVariable String txref
     ){
         return ResponseEntity.ok(boxService.getBatteryCapacity(txref));
+    }
+
+    @PostMapping("/{txref}/items")
+    public ResponseEntity<List<ItemResponse>> loadItems(
+            @PathVariable String txref,
+            @Valid @RequestBody List<ItemRequest> items
+    ){
+        return ResponseEntity.ok(boxService.loadItems(txref, items));
     }
 
 }
