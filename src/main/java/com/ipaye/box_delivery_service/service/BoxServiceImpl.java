@@ -96,7 +96,6 @@ public class BoxServiceImpl implements BoxService {
          */
 
         box.setState(BoxState.LOADING);
-        boxRepository.save(box);
 
         List<Item> newItems = items.stream()
                 .map(request -> {
@@ -114,7 +113,6 @@ public class BoxServiceImpl implements BoxService {
         List<Item> savedItems = itemRepository.saveAll(newItems);
 
         box.setState(BoxState.LOADED);
-        boxRepository.save(box);
 
         return savedItems.stream()
                 .map(this::toItemResponse)
