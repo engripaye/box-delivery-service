@@ -1,6 +1,6 @@
 # Box Delivery Service
 
-> A production-minded RESTful API built with **Java 21 and Spring Boot 4.0.7** for managing delivery boxes, validating loading operations, enforcing battery and weight constraints, and exposing box availability and status information.
+> A production-minded RESTful API built with **Java 21 and Spring Boot 4.0.7** for managing delivery boxes, validating loading operations, enforcing battery and weight constraints, and exposing box availability and status information
 
 ![Java](https://img.shields.io/badge/Java-21-orange?style=for-the-badge\&logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.7-brightgreen?style=for-the-badge\&logo=springboot)
