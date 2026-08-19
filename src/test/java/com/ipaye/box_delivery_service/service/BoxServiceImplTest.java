@@ -7,6 +7,7 @@ import com.ipaye.box_delivery_service.enums.BoxState;
 import com.ipaye.box_delivery_service.exception.BoxAlreadyExistsException;
 import com.ipaye.box_delivery_service.exception.BoxNotFoundException;
 import com.ipaye.box_delivery_service.exception.InsufficientBatteryException;
+import com.ipaye.box_delivery_service.exception.InvalidBoxStateException;
 import com.ipaye.box_delivery_service.repository.BoxRepository;
 import com.ipaye.box_delivery_service.repository.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -148,6 +149,34 @@ class BoxServiceImplTest {
 
         assertThrows(
                 InsufficientBatteryException.class,
+                () -> boxService.loadItems("BOX100", items)
+        );
+
+        verify(itemRepository, never()).saveAll(any());
+    }
+
+    @Test
+    void shouldRejectLoadingWhenBoxIsNotIdle(){
+        Box box = createBox(
+                "BOX100",
+                500,
+                80,
+                BoxState.LOADED
+        );
+
+        when(boxRepository.findByTxref("BOX100"))
+                .thenReturn(Optional.of(box));
+
+        List<ItemRequest> items = List.of(
+                new ItemRequest(
+                        "Laptop",
+                        100,
+                        "ITEM_001"
+                )
+        );
+
+        assertThrows(
+                InvalidBoxStateException.class,
                 () -> boxService.loadItems("BOX100", items)
         );
 
