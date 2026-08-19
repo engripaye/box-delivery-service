@@ -11,10 +11,10 @@ public interface BoxRepository extends JpaRepository<Box, Long> {
 
     Optional<Box> findByTxref(String txref);
 
-    Boolean existByTxref(String txref);
+    Boolean existsByTxref(String txref);
 
     List<Box> findByStateAndBatterCapacityGreaterThanEqual(
             BoxState state,
-            Integer batterCapacity
+            Integer batteryCapacity
     );
 }
