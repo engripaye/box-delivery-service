@@ -3,6 +3,7 @@ package com.ipaye.box_delivery_service.service;
 import com.ipaye.box_delivery_service.dto.CreateBoxRequest;
 import com.ipaye.box_delivery_service.entity.Box;
 import com.ipaye.box_delivery_service.enums.BoxState;
+import com.ipaye.box_delivery_service.exception.BoxAlreadyExistsException;
 import com.ipaye.box_delivery_service.repository.BoxRepository;
 import com.ipaye.box_delivery_service.repository.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,9 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BoxServiceImplTest {
@@ -69,6 +70,22 @@ class BoxServiceImplTest {
 
     @Test
     void shouldRejectDuplicateBox(){
+
+        CreateBoxRequest request = new CreateBoxRequest(
+                "BOX100",
+                500,
+                80
+        );
+
+        when(boxRepository.existsByTxref("BOX100"))
+                .thenReturn(true);
+
+        assertThrows(
+                BoxAlreadyExistsException.class,
+                () -> boxService.createBox(request)
+        );
+
+        verify(boxRepository, never()).save(any(Box.class));
 
     }
 }
