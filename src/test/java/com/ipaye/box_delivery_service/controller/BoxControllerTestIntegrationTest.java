@@ -89,4 +89,21 @@ public class BoxControllerTestIntegrationTest {
                 .andExpect(jsonPath("$").isArray());
     }
 
+    @Test
+    void shouldRejectInvalidBoxRequest() throws Exception {
+        mockMvc.perform(
+                        post("/api/boxes")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                            {
+                                "txref": "",
+                                "weightLimit": 0,
+                                "batteryCapacity": -10
+                            }
+                            """)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400));
+    }
+
 }
