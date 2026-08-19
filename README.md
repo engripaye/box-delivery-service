@@ -1,4 +1,4 @@
-# 📦 Box Delivery Service
+# Box Delivery Service
 
 > A production-minded RESTful API built with **Java 21 and Spring Boot** for managing delivery boxes, validating loading operations, enforcing battery and weight constraints, and exposing box availability and status information.
 
@@ -10,7 +10,7 @@
 
 ---
 
-## 🚀 Overview
+## Overview
 
 **Box Delivery Service** is a Spring Boot REST API designed to manage delivery boxes and the items loaded into them.
 
@@ -28,7 +28,7 @@ The implementation deliberately favors **clarity, maintainability, testability, 
 
 ---
 
-## 🎯 Assessment Objectives
+## Assessment Objectives
 
 The application provides the core capabilities required by the assessment:
 
@@ -42,7 +42,7 @@ The application provides the core capabilities required by the assessment:
 
 ---
 
-## 🧠 Key Business Rules
+## Key Business Rules
 
 ### ⚖️ Weight Constraint
 
@@ -75,7 +75,7 @@ The loading operation is rejected before the items are persisted.
 
 ---
 
-### 🔋 Battery Constraint
+### Battery Constraint
 
 A box must have at least **25% battery capacity** before it can be loaded.
 
@@ -90,7 +90,7 @@ This rule is implemented as business logic in the service layer rather than bein
 
 ---
 
-### 📦 Box State
+### Box State
 
 Boxes follow a defined lifecycle:
 
@@ -184,7 +184,7 @@ This makes the system easier to test, extend, and maintain.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 src/
@@ -238,7 +238,7 @@ src/
 
 ---
 
-# 📡 API Documentation
+# API Documentation
 
 ## 1. Create a Box
 
@@ -546,7 +546,7 @@ http://localhost:8080
 
 ---
 
-# 🗄️ Database
+# Database
 
 The application uses **H2** as a lightweight relational database for assessment purposes.
 
@@ -561,7 +561,7 @@ The persistence layer uses Spring Data JPA, allowing the underlying database to 
 
 ---
 
-# 🧩 Design Assumptions
+# Design Assumptions
 
 The assessment explicitly allows reasonable assumptions. The following decisions were made:
 
@@ -595,7 +595,7 @@ The box state model is represented in the domain, while physical delivery operat
 
 ---
 
-# 🔐 Business Logic vs Validation
+# Business Logic vs Validation
 
 A deliberate distinction is made between **input validation** and **business rules**.
 
@@ -624,7 +624,7 @@ This separation keeps the application easier to test and maintain.
 
 ---
 
-# 📈 Future Improvements
+# Future Improvements
 
 If this service were being evolved beyond the assessment, possible improvements would include:
 
@@ -645,7 +645,7 @@ These features are intentionally outside the current scope to keep the assessmen
 
 ---
 
-# 💡 Engineering Principles
+# Engineering Principles
 
 The implementation follows several practical engineering principles:
 
@@ -663,7 +663,7 @@ The implementation follows several practical engineering principles:
 
 ---
 
-# 📊 Quality Goals
+# Quality Goals
 
 The project prioritizes:
 
