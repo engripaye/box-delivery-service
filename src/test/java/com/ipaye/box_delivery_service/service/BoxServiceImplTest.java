@@ -1,10 +1,12 @@
 package com.ipaye.box_delivery_service.service;
 
 import com.ipaye.box_delivery_service.dto.CreateBoxRequest;
+import com.ipaye.box_delivery_service.dto.ItemRequest;
 import com.ipaye.box_delivery_service.entity.Box;
 import com.ipaye.box_delivery_service.enums.BoxState;
 import com.ipaye.box_delivery_service.exception.BoxAlreadyExistsException;
 import com.ipaye.box_delivery_service.exception.BoxNotFoundException;
+import com.ipaye.box_delivery_service.exception.InsufficientBatteryException;
 import com.ipaye.box_delivery_service.repository.BoxRepository;
 import com.ipaye.box_delivery_service.repository.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -105,7 +108,7 @@ class BoxServiceImplTest {
         );
     }
 
-    private Box createbox(
+    private Box createBox(
             String txref,
             int weightLimit,
             int battery,
@@ -121,5 +124,33 @@ class BoxServiceImplTest {
         box.setItems(new ArrayList<>());
 
         return box;
+    }
+
+    @Test
+    void shouldRejectLoadingBatteryIsBelowMinimum(){
+        Box box = createBox(
+                "BOX100",
+                500,
+                20,
+                BoxState.IDLE
+        );
+
+        when(boxRepository.findByTxref("BOX100"))
+                .thenReturn(Optional.of(box));
+
+        List<ItemRequest> items = List.of(
+                new ItemRequest(
+                        "Laptop",
+                        100,
+                        "ITEM_001"
+                )
+        );
+
+        assertThrows(
+                InsufficientBatteryException.class,
+                () -> boxService.loadItems("BOX100", items)
+        );
+
+        verify(itemRepository, never()).saveAll(any());
     }
 }
