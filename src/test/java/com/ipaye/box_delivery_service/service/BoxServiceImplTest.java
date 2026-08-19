@@ -274,4 +274,18 @@ class BoxServiceImplTest {
 
         verify(itemRepository).saveAll(any());
     }
+
+    @Test
+    void shouldRejectEmptyItemList(){
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> boxService.loadItems(
+                        "BOX100",
+                        List.of()
+                )
+        );
+
+        verifyNoInteractions(boxRepository);
+        verifyNoInteractions(itemRepository);
+    }
 }
