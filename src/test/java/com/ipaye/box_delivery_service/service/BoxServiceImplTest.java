@@ -288,4 +288,42 @@ class BoxServiceImplTest {
         verifyNoInteractions(boxRepository);
         verifyNoInteractions(itemRepository);
     }
+
+    @Test
+    void shouldReturnAvailableBoxes(){
+        Box box1 = createBox(
+                "BOX001",
+                500,
+                80,
+                BoxState.IDLE
+        );
+
+        Box box2 = createBox(
+                "BOX002",
+                400,
+                90,
+                BoxState.IDLE
+        );
+
+        when(boxRepository
+                .findByStateAndBatteryCapacityGreaterThanEqual(
+                        BoxState.IDLE,
+                        25
+                ))
+                .thenReturn(List.of(box1, box2));
+
+        var response = boxService.getAvailableBoxes();
+
+        assertEquals(2, response.size());
+
+        assertEquals(
+                "BOX001",
+                response.get(0).txref()
+        );
+
+        assertEquals(
+                "BOX002",
+                response.get(1).txref()
+        );
+    }
 }
