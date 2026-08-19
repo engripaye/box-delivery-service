@@ -145,12 +145,33 @@ public class BoxServiceImpl implements BoxService {
             );
 
 
-    }
+        }
         if (box.getState() != BoxState.IDLE) {
             throw new InvalidBoxStateException(
                     "Box must be in IDLE state before loading items"
             );
         }
 
+    }
 
-}
+    private BoxResponse toBoxResponse(Box box) {
+        return new BoxResponse(
+                box.getId(),
+                box.getTxref(),
+                box.getWeightLimit(),
+                box.getBatteryCapacity(),
+                box.getState()
+        );
+    }
+
+    private ItemResponse toItemResponse(Item item) {
+
+        return new ItemResponse(
+                item.getId(),
+                item.getName(),
+                item.getWeight(),
+                item.getCode()
+        );
+    }
+
+    }
