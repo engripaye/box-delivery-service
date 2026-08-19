@@ -31,5 +31,11 @@ public class BoxController {
         return ResponseEntity.ok(boxService.getAvailableBoxes());
     }
 
+    @GetMapping("/{txref}/battery")
+    public ResponseEntity<?> getBatteryCapacity(
+            @PathVariable String txref
+    ){
+        return ResponseEntity.ok(boxService.getBatteryCapacity(txref));
+    }
 
 }
