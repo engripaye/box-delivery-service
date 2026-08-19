@@ -107,9 +107,16 @@ public class BoxServiceImpl implements BoxService {
                 .map(this::toItemResponse)
                 .toList();
     }
+
     @Override
+    @Transactional(readOnly = true)
     public List<ItemResponse> getLoadedItems(String txref) {
-        return List.of();
+        findBox(txref);
+
+        return itemRepository.findByBoxTxref(txref)
+                .stream()
+                .map(this::toItemResponse)
+                .toList();
     }
 
     @Override
