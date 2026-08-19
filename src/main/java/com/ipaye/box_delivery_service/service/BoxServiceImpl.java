@@ -44,7 +44,14 @@ public class BoxServiceImpl implements BoxService {
     @Override
     @Transactional(readOnly = true)
     public List<BoxResponse> getAvailableBoxes() {
-        return List.of();
+        return boxRepository
+                .findByStateAndBatteryCapacityGreaterThanEqual(
+                        BoxState.IDLE,
+                        MINIMUM_BATTERY_PERCENTAGE
+                )
+                .stream()
+                .map(this::toBoxResponse)
+                .toList();
     }
 
     @Override
