@@ -80,5 +80,13 @@ public class BoxControllerTestIntegrationTest {
                 .andExpect(jsonPath("$.status").value(404));
     }
 
+    @Test
+    void shouldReturnAvailableBoxes() throws Exception {
+        mockMvc.perform(
+                        get("/api/boxes/available")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray());
+    }
 
 }
