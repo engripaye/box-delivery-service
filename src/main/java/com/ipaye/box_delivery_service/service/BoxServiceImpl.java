@@ -120,12 +120,16 @@ public class BoxServiceImpl implements BoxService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BatteryResponse getBatteryCapacity(String txref) {
-        return null;
+
+        Box box = findBox(txref);
+
+        return new BatteryResponse(
+                box.getTxref(),
+                box.getBatteryCapacity()
+        );
     }
 
-    @Override
-    public BoxResponse createBox(CreateBoxRequest createBoxRequest) {
-        return null;
-    }
+
 }
