@@ -48,6 +48,7 @@ public class DataInitializer {
             boxRepository.save(box2);
             boxRepository.save(box3);
             boxRepository.save(box4);
+
         };
     }
 }
