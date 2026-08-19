@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -102,5 +103,23 @@ class BoxServiceImplTest {
                 BoxNotFoundException.class,
                 () -> boxService.getBatteryCapacity("UNKNOWN")
         );
+    }
+
+    private Box createbox(
+            String txref,
+            int weightLimit,
+            int battery,
+            BoxState state
+    ){
+        Box box = new Box();
+
+        box.setId(1L);
+        box.setTxref(txref);
+        box.setWeightLimit(weightLimit);
+        box.setBatteryCapacity(battery);
+        box.setState(state);
+        box.setItems(new ArrayList<>());
+
+        return box;
     }
 }
