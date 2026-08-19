@@ -326,4 +326,22 @@ class BoxServiceImplTest {
                 response.get(1).txref()
         );
     }
+
+    @Test
+    void shouldReturnBatteryCapacity(){
+        Box box = createBox(
+                "BOX100",
+                500,
+                85,
+                BoxState.IDLE
+        );
+
+        when(boxRepository.findByTxref("BOX100"))
+                .thenReturn(Optional.of(box));
+
+        var response = boxService.getBatteryCapacity("BOX100");
+
+        assertEquals("BOX100", response.txref());
+        assertEquals(85, response.batteryCapacity());
+    }
 }
