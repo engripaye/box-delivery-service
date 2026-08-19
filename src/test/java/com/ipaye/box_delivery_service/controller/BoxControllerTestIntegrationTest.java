@@ -63,6 +63,7 @@ public class BoxControllerTestIntegrationTest {
                         post("/api/boxes")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(request)
+
                 )
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status").value(409));
