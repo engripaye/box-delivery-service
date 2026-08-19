@@ -7,6 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 public class DataInitializer {
 
@@ -14,46 +16,16 @@ public class DataInitializer {
     CommandLineRunner initializeDatabase(BoxRepository boxRepository){
 
         return args -> {
-            if (boxRepository.count() > 0) {
+           if (boxRepository.count() > 0) {
+               return;
+           }
 
-                return;
-            }
-
-            boxRepository.save(new Box(
-                    null,
-                    "BOX001",
-                    500,
-                    85,
-                     BoxState.IDLE,
-                    null
-            ));
-
-            boxRepository.save(new Box(
-                    null,
-                    "BOX002",
-                    400,
-                    60,
-                     BoxState.IDLE,
-                    null
-            ));
-
-            boxRepository.save(new Box(
-                    null,
-                    "BOX003",
-                    300,
-                    20,
-                     BoxState.IDLE,
-                    null
-            ));
-
-            boxRepository.save(new Box(
-                    null,
-                    "BOX004",
-                    500,
-                    90,
-                     BoxState.LOADED,
-                    null
-            ));
+           boxRepository.saveAll(List.of(
+                   new Box(null, "BOX001", 500, 85, BoxState.IDLE, null),
+                   new Box(null, "BOX002", 400, 60, BoxState.IDLE, null),
+                   new Box(null, "BOX003", 300, 20, BoxState.IDLE, null),
+                   new Box(null, "BOX004", 500, 90, BoxState.LOADED, null)
+           ));
         };
     }
 }
