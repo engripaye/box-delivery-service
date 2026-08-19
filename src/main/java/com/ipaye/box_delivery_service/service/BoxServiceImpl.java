@@ -5,6 +5,7 @@ import com.ipaye.box_delivery_service.entity.Box;
 import com.ipaye.box_delivery_service.entity.Item;
 import com.ipaye.box_delivery_service.enums.BoxState;
 import com.ipaye.box_delivery_service.exception.BoxAlreadyExistsException;
+import com.ipaye.box_delivery_service.exception.BoxNotFoundException;
 import com.ipaye.box_delivery_service.exception.InsufficientCapacityException;
 import com.ipaye.box_delivery_service.repository.BoxRepository;
 import com.ipaye.box_delivery_service.repository.ItemRepository;
@@ -129,6 +130,12 @@ public class BoxServiceImpl implements BoxService {
                 box.getTxref(),
                 box.getBatteryCapacity()
         );
+    }
+
+    private Box findBox(String txref) {
+
+        return boxRepository.findByTxref(txref)
+                .orElseThrow(() -> new BoxNotFoundException(txref));
     }
 
 
